@@ -112,11 +112,13 @@ Port mappings to expose the application on port 5000.
 Secrets management to securely pass sensitive information (like FLASK_API_KEY and AWS credentials) via AWS SSM Parameter Store.
 Deployment is done using the latest Docker image stored in ECR.
 Setting Up CI/CD for Your Project
+
 Step 1: Configure AWS Resources
 ECR (Elastic Container Registry): Create an ECR repository to store your Docker images.
 ECS Task Definition: Register the task definition based on task-definition.json.
 ECS Service: Set up an ECS service to run the task on Fargate.
 SSM Parameters: Store sensitive values (e.g., FLASK_API_KEY, AWS Access Keys) in AWS Systems Manager Parameter Store.
+
 Step 2: Set Up Bitbucket Pipelines
 In Bitbucket, ensure your repository has access to AWS credentials by setting the following variables in Bitbucket repository settings under Pipelines > Repository variables:
 
