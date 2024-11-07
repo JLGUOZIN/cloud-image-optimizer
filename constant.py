@@ -1,0 +1,6 @@
+import os
+
+CDN_CLOUDFRONT_ID = "[CDN_CLOUDFRONT_ID]"
+
+AWS_ACCESS_KEY_ID = os.environ.get("ACCESS_KEY_ID_AWS")
+AWS_SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY_AWS")

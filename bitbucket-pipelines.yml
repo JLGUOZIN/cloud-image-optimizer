@@ -1,0 +1,31 @@
+options:
+  docker: true
+
+pipelines:
+  branches:    
+    master:
+      - step:
+          name: Generate AWS ECR Login Script
+          image: atlassian/pipelines-awscli:latest
+          script:
+            - echo $(aws ecr get-login --no-include-email --region ap-southeast-1) > login.sh
+          artifacts:
+            - login.sh
+          caches:
+            - pip
+      - step:
+          name: Build Docker Images and Push to AWS ECR
+          image: maven:3.3.9
+          caches:
+            - maven
+          script:
+            - sh login.sh        
+            - docker build -t [ProjectName] .
+            - docker tag [ProjectName] [AccountID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest
+            - docker push [AccountID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest
+      - step:
+          name: Run AWS ECS Task
+          image: atlassian/pipelines-awscli:latest
+          script:
+            - aws ecs register-task-definition --cli-input-json file://task-definition.json
+            - aws ecs update-service --service [ProjectName]-service --cluster [ProjectName]-cluster --task-definition [ProjectName]-task-definition
